@@ -1,0 +1,119 @@
+/* Базовые переменные в стиле Material Design */
+:root {
+    --bg-dark: #121212;
+    --text-primary: #ffffff;
+    --text-secondary: #b0bec5;
+    --accent-color: #bb86fc; /* Акцентный цвет Material */
+    --font-main: 'Roboto', sans-serif;
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-main);
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+}
+
+/* Контейнер первого слайда */
+.hero-section {
+    position: relative;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    overflow: hidden;
+}
+
+/* --- Анимация SVG (Отрисовка линий) --- */
+.hero-svg {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 20px;
+}
+
+.hero-svg path {
+    stroke-dasharray: 300; /* Длина контура */
+    stroke-dashoffset: 300; /* Сдвигаем контур за пределы видимости */
+    animation: drawStroke 2.5s ease-in-out forwards;
+}
+
+@keyframes drawStroke {
+    to { stroke-dashoffset: 0; }
+}
+
+/* --- Анимация появления текста (Fade Up) --- */
+.hero-title {
+    font-size: 3.5rem;
+    margin: 0 0 10px 0;
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeUp 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s forwards;
+}
+
+.hero-subtitle {
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    max-width: 600px;
+    margin: 0 auto 30px auto;
+    line-height: 1.6;
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeUp 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.8s forwards; /* Задержка больше, чем у заголовка */
+}
+
+.hero-actions {
+    opacity: 0;
+    animation: fadeUp 1s ease forwards 1.2s;
+}
+
+.hero-btn {
+    display: inline-block;
+    padding: 12px 28px;
+    background-color: var(--accent-color);
+    color: #000;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 4px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hero-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(187, 134, 252, 0.4);
+}
+
+@keyframes fadeUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* --- Анимация индикатора скролла (Пульсация 4 секунды) --- */
+.scroll-indicator {
+    position: absolute;
+    bottom: 40px;
+    color: var(--text-secondary);
+    width: 32px;
+    height: 32px;
+    /* Увеличенная длительность цикла пульсации для плавности */
+    animation: scrollPulse 4s infinite ease-in-out;
+}
+
+@keyframes scrollPulse {
+    0% {
+        transform: translateY(0);
+        opacity: 0.5;
+    }
+    50% {
+        transform: translateY(15px);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 0.5;
+    }
+}
