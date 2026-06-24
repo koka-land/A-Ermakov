@@ -22,23 +22,36 @@
     transform: scale(1.4);
     margin-bottom: 60px;
     overflow: visible;
-    /* Применяем объединенную анимацию: 1.5 секунды, кривая из Animista */
-    animation: rotate-fade-in 1.5s cubic-bezier(0.455, 0.030, 0.515, 0.955) both;
+
+    /* Запускаем обе анимации параллельно.
+       Время увеличил до 1.8s, чтобы отскок в конце читался плавнее */
+    animation:
+        logo-fade 1.8s forwards,
+        logo-spin-inertia 1.8s forwards;
 }
 
-/* Анимация: Вращение + Появление */
-@keyframes rotate-fade-in {
+/* 1. Анимация прозрачности (ваша настройка 70%) */
+@keyframes logo-fade {
+    0% { opacity: 0; }
+    70% { opacity: 1; }
+    100% { opacity: 1; }
+}
+
+/* 2. Точечная настройка вращения с инерцией */
+@keyframes logo-spin-inertia {
     0% {
-        opacity: 0; /* На старте прозрачный */
-        /* Начинаем с 0 градусов, обязательно сохраняя scale(1.4) */
-        transform: scale(1.4) rotateY(0);
+        transform: scale(1.4) rotateY(0deg);
+        /* Быстрый старт, который плавно замедляется к моменту "перелета" */
+        animation-timing-function: ease-out;
     }
-    70% {
-        opacity: 1; /* К 40% времени анимации логотип полностью проявится */
+    80% {
+        /* Перелет: 2 полных оборота (720deg) + 25 градусов по инерции */
+        transform: scale(1.4) rotateY(745deg);
+        /* Плавный отскок назад на место */
+        animation-timing-function: ease-in-out;
     }
     100% {
-        opacity: 1;
-        /* 720deg = 2 полных оборота. Если захотите 3 оборота, напишите 1080deg */
+        /* Финальная точка: логотип встает идеально ровно */
         transform: scale(1.4) rotateY(720deg);
     }
 }
