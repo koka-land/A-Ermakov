@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Блог Александра Ермакова</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;700&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/hero.css">
@@ -61,23 +61,29 @@
         <h1 class="hero-title" id="animated-title">Александр Ермаков</h1>
         <p class="hero-subtitle">Блог учителя информатики, робототехники и программирования</p>
     </div>
+
+    <a href="#about" class="scroll-indicator">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+    </a>
 </section>
 
 <script>
     document.addEventListener("DOMContentLoaded", () => {
         const titleElement = document.getElementById('animated-title');
         const text = titleElement.textContent;
-        titleElement.innerHTML = ''; // Очищаем оригинальный текст
+        titleElement.innerHTML = '';
 
         text.split('').forEach((char, index) => {
             const span = document.createElement('span');
             if (char === ' ') {
-                span.innerHTML = '&nbsp;'; // Сохраняем пробелы
+                span.innerHTML = '&nbsp;';
             } else {
                 span.textContent = char;
                 span.classList.add('char');
-                // Задержка: логотип рисуется ~1.5с, буквы начинают появляться после 1.2с
-                span.style.animationDelay = `${1.2 + (index * 0.05)}s`;
+                // Задержку уменьшили, так как логотип больше не анимируется (начинаем с 0.2с)
+                span.style.animationDelay = `${0.2 + (index * 0.05)}s`;
             }
             titleElement.appendChild(span);
         });
