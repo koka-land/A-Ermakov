@@ -26,8 +26,8 @@
     /* Запускаем обе анимации параллельно.
        Время увеличил до 1.8s, чтобы отскок в конце читался плавнее */
     animation:
-        logo-fade 1.8s forwards,
-        logo-spin-inertia 1.8s forwards;
+        logo-fade 1.6s forwards,
+        logo-spin-inertia 1.6s forwards;
 }
 
 /* 1. Анимация прозрачности (ваша настройка 70%) */
@@ -40,19 +40,19 @@
 /* 2. Точечная настройка вращения с инерцией */
 @keyframes logo-spin-inertia {
     0% {
-        transform: scale(1.4) rotateY(0deg);
+        transform: scale(1.4) rotateY(-45deg);
         /* Быстрый старт, который плавно замедляется к моменту "перелета" */
         animation-timing-function: ease-out;
     }
-    40% {
-        /* Перелет: 2 полных оборота (720deg) + 25 градусов по инерции */
-        transform: scale(1.4) rotateY(780deg);
+    30% {
+        /* Перелет: 1 полныq оборота + 90deg (360deg) + 50 градусов по инерции */
+        transform: scale(1.4) rotateY(420deg);
         /* Плавный отскок назад на место */
         animation-timing-function: ease-in-out;
     }
     100% {
         /* Финальная точка: логотип встает идеально ровно */
-        transform: scale(1.4) rotateY(720deg);
+        transform: scale(1.4) rotateY(360deg);
     }
 }
 
