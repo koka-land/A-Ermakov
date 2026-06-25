@@ -92,7 +92,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
 
-        time += 0.0001;
+        time += 0.008;
         requestAnimationFrame(animate);
     }
 
