@@ -70,7 +70,7 @@
 /* --- Заголовок (Посимвольная анимация) --- */
 .hero-title {
     font-family: 'Montserrat', sans-serif; /* Подключили Montserrat */
-    font-size: 3.5rem;
+    font-size: 4.5rem;
     font-weight: 300;
     margin: 0 0 10px 0;
     letter-spacing: 1.35px;
