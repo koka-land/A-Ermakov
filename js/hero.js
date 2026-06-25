@@ -79,7 +79,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
 
-        time += 0.02; // Скорость пульса
+        time += 0.002; // Скорость пульса
         requestAnimationFrame(animate);
     }
 
