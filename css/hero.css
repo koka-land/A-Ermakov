@@ -94,7 +94,7 @@
 
 /* --- Подзаголовок (Появление целиком) --- */
 .hero-subtitle {
-    font-size: 1.25rem;
+    font-size: 2.25rem;
     color: var(--text-secondary);
     margin: 0;
     font-weight: 300;
