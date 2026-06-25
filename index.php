@@ -69,6 +69,7 @@
             <polyline points="6 9 12 15 18 9"></polyline>
         </svg>
     </a>
+<canvas id="wave-bg"></canvas>
 </section>
 
 <script>
