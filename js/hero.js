@@ -75,4 +75,40 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 let x1_base = startX + i * spacing;
                 let y1_base = startY + j * spacing;
-                let x2_base = startX + (
+                let x2_base = startX + (i + 1) * spacing;
+                let y2_base = startY + j * spacing;
+                let x3_base = startX + i * spacing;
+                let y3_base = startY + (j + 1) * spacing;
+                let x4_base = startX + (i + 1) * spacing;
+                let y4_base = startY + (j + 1) * spacing;
+
+                let p1 = getPoint(x1_base, y1_base, time);
+                let p2 = getPoint(x2_base, y2_base, time);
+                let p3 = getPoint(x3_base, y3_base, time);
+                let p4 = getPoint(x4_base, y4_base, time);
+
+                ctx.beginPath();
+                ctx.moveTo(p1.x, p1.y);
+                ctx.lineTo(p2.x, p2.y);
+                ctx.lineTo(p3.x, p3.y);
+                ctx.closePath();
+                ctx.fill();
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.moveTo(p2.x, p2.y);
+                ctx.lineTo(p4.x, p4.y);
+                ctx.lineTo(p3.x, p3.y);
+                ctx.closePath();
+                ctx.fill();
+                ctx.stroke();
+            }
+        }
+
+        // Замедленное время для вальяжной анимации
+        time += 0.005;
+        requestAnimationFrame(animate);
+    }
+
+    animate();
+});
