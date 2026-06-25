@@ -67,7 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function animate() {
         ctx.clearRect(0, 0, width, height);
 
-        const lineColor = 'rgba(38, 70, 83, 0.50)';
+        const lineColor = 'rgba(38, 70, 83, 0.20)';
         const fillColor = 'rgba(38, 70, 83, 0.05)';
 
         ctx.lineWidth = 1;
