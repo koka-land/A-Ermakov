@@ -1,6 +1,8 @@
 // --- Анимация фона: Плывущая сетка треугольников ---
-const canvas = document.getElementById('wave-bg');
-if (canvas) {
+document.addEventListener("DOMContentLoaded", () => {
+    const canvas = document.getElementById('wave-bg');
+    if (!canvas) return; // Если canvas нет на странице, скрипт не упадет с ошибкой
+
     const ctx = canvas.getContext('2d');
     let width, height, cols, rows;
     const spacing = 60; // Расстояние между точками (размер треугольников)
@@ -35,10 +37,8 @@ if (canvas) {
                 let x = i * spacing;
                 let y = j * spacing;
 
-                // Добавляем "волну" с помощью синусоиды и косинусоиды
-                // Это заставляет точки плавно двигаться вверх-вниз и немного по диагонали
+                // Добавляем "волну" с помощью синусоиды
                 let offset = Math.sin(x * 0.005 + time) * 20 + Math.cos(y * 0.005 + time * 0.8) * 15;
-
                 let y1 = y + offset;
 
                 // Координаты соседних точек (с их собственными волнами)
@@ -51,7 +51,7 @@ if (canvas) {
                 let x4 = (i + 1) * spacing;
                 let y4 = (j + 1) * spacing + Math.sin(x4 * 0.005 + time) * 20 + Math.cos(y4 * 0.005 + time * 0.8) * 15;
 
-                // Рисуем первый треугольник (верхний левый угол ячейки)
+                // Рисуем первый треугольник
                 ctx.beginPath();
                 ctx.moveTo(x, y1);
                 ctx.lineTo(x2, y2);
@@ -60,7 +60,7 @@ if (canvas) {
                 ctx.fill();
                 ctx.stroke();
 
-                // Рисуем второй треугольник (нижний правый угол ячейки)
+                // Рисуем второй треугольник
                 ctx.beginPath();
                 ctx.moveTo(x2, y2);
                 ctx.lineTo(x4, y4);
@@ -71,13 +71,9 @@ if (canvas) {
             }
         }
 
-        // Увеличиваем время для анимации (0.02 - скорость волны)
-        time += 0.02;
-
-        // Запускаем следующий кадр
+        time += 0.02; // Скорость волны
         requestAnimationFrame(animate);
     }
 
-    // Запускаем анимацию
     animate();
-}
+});
