@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 let x = i * spacing;
                 let baseY = j * spacing;
 
-                let offset = Math.sin(x * 0.005 + time) * 35 + Math.cos(baseY * 0.005 + time * 0.8) * 25;
+                let offset = Math.sin(x * 0.005 + time) * 35 + Math.cos(baseY * 0.005 + time * 0.8) * 30;
                 let y1 = baseY + offset;
 
                 let x2 = (i + 1) * spacing;
