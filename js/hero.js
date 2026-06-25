@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const ctx = canvas.getContext('2d');
     let width, height, cols, rows, centerX, centerY;
-    const spacing = 560;
+    const spacing = 500;
     let time = 0;
 
     function resize() {
