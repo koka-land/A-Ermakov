@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const ctx = canvas.getContext('2d');
     let width, height, cols, rows;
-    const spacing = 120; // Твой увеличенный размер
+    const spacing = 500; // Твой увеличенный размер
     let time = 0;
 
     function resize() {
@@ -86,7 +86,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
 
-        time += 0.006; // Твоя замедленная скорость
+        time += 0.0006; // Твоя замедленная скорость
         requestAnimationFrame(animate);
     }
 
