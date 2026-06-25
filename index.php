@@ -14,7 +14,7 @@
 <section class="hero-section">
     <div class="hero-content">
 
-        <svg class="hero-svg" xmlns="http://www.w3.org/2000/svg" width="208" height="202" version="1.1">
+        <svg class="hero-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 208 202" version="1.1">
           <g class="layer">
             <title>Layer 1</title>
             <g transform="rotate(-90 170 170)" stroke-width="6" fill="none">

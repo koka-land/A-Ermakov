@@ -30,40 +30,40 @@
 
 /* --- Логотип --- */
 .hero-svg {
-    transform: scale(1.4);
+    /* Задаем новые размеры.
+       max-width делает его резиновым на телефонах, а width: 100% заставляет занимать все доступное место до 400px */
+    width: 100%;
+    max-width: 400px;
+    height: auto; /* Высота высчитается автоматически исходя из пропорций viewBox (те самые 388px) */
+
     margin-bottom: 60px;
     overflow: visible;
 
-    /* Запускаем обе анимации параллельно.
-       Время увеличил до 1.8s, чтобы отскок в конце читался плавнее */
     animation:
         logo-fade 1.6s forwards,
         logo-spin-inertia 1.6s forwards;
 }
 
-/* 1. Анимация прозрачности (ваша настройка 70%) */
+/* 1. Анимация прозрачности */
 @keyframes logo-fade {
     0% { opacity: 0; }
     90% { opacity: 1; }
     100% { opacity: 1; }
 }
 
-/* 2. Точечная настройка вращения с инерцией */
+/* 2. Точечная настройка вращения с инерцией (БЕЗ SCALE) */
 @keyframes logo-spin-inertia {
     0% {
-        transform: scale(1.4) rotateY(-45deg);
-        /* Быстрый старт, который плавно замедляется к моменту "перелета" */
+        /* Оставили только вращение */
+        transform: rotateY(-45deg);
         animation-timing-function: ease-out;
     }
     30% {
-        /* Перелет: 1 полныq оборота + 90deg (360deg) + 50 градусов по инерции */
-        transform: scale(1.4) rotateY(420deg);
-        /* Плавный отскок назад на место */
+        transform: rotateY(420deg);
         animation-timing-function: ease-in-out;
     }
     100% {
-        /* Финальная точка: логотип встает идеально ровно */
-        transform: scale(1.4) rotateY(360deg);
+        transform: rotateY(360deg);
     }
 }
 
