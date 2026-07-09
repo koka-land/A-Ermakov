@@ -1,0 +1,372 @@
+/* ========================================= */
+/* --- ОСНОВНАЯ СЕКЦИЯ (Подложка) --- */
+/* ========================================= */
+.dashboard-section {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100%;
+    background-color: var(--bg-light);
+    z-index: 50;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    transform: translateY(100vh);
+    transition: transform 1.2s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.dashboard-section.slide-in {
+    transform: translateY(0);
+}
+
+.dashboard-section.no-transition {
+    transition: none;
+}
+
+/* ========================================= */
+/* --- ГЛАВНЫЙ КОНТЕЙНЕР (БОКС) --- */
+/* ========================================= */
+.dashboard-container {
+    max-width: 1440px;
+    width: 95%;
+    height: 90vh;
+    background-color: #f4f7f8;
+    border-radius: 24px;
+    box-shadow: 0 20px 40px rgba(12, 42, 54, 0.1);
+
+    display: flex;
+    overflow: hidden;
+    position: relative;
+}
+
+/* ========================================= */
+/* --- БОКОВОЕ МЕНЮ (Sidebar) --- */
+/* ========================================= */
+.sidebar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    z-index: 100;
+
+    width: 88px;
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    padding: 40px 0;
+
+    transition: width 0.4s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.4s ease;
+    overflow: hidden;
+    border-right: 1px solid rgba(12, 42, 54, 0.05);
+}
+
+.sidebar:hover {
+    width: 250px;
+    box-shadow: 15px 0 40px rgba(12, 42, 54, 0.08);
+    border-right: 1px solid transparent;
+}
+
+/* --- Логотип --- */
+.logo-mini {
+    display: flex;
+    align-items: center;
+    font-family: 'Montserrat', sans-serif;
+    color: var(--text-primary);
+    margin-bottom: 50px;
+    padding: 0 26px;
+    white-space: nowrap;
+}
+
+.logo-icon {
+    font-weight: 800;
+    font-size: 24px;
+    min-width: 36px;
+}
+
+.logo-text {
+    font-weight: 500;
+    font-size: 18px;
+    opacity: 0;
+    transform: translateX(-10px);
+    transition: all 0.3s ease;
+}
+
+.sidebar:hover .logo-text {
+    opacity: 1;
+    transform: translateX(0);
+    transition-delay: 0.1s;
+}
+
+/* --- Навигация --- */
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 0 16px;
+    flex-grow: 1;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: var(--text-secondary);
+    opacity: 0.5;
+    padding: 14px 16px;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.settings-item {
+    margin-top: auto;
+}
+
+.nav-item:hover, .nav-item.active {
+    opacity: 1;
+    background-color: rgba(38, 70, 83, 0.06);
+    color: var(--text-primary);
+}
+
+.nav-text {
+    font-size: 16px;
+    font-weight: 600;
+    margin-left: 16px;
+    opacity: 0;
+    transform: translateX(-10px);
+    transition: all 0.3s ease;
+}
+
+.sidebar:hover .nav-text {
+    opacity: 1;
+    transform: translateX(0);
+    transition-delay: 0.1s;
+}
+
+/* ========================================= */
+/* --- АНИМАЦИЯ ИКОНОК --- */
+/* ========================================= */
+
+.nav-item {
+    --icon-accent: #f4a261; /* Песочный цвет */
+}
+
+/* Базовый размер всех иконок — 24px */
+.nav-icon {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    transform-origin: center;
+    /* Плавный переход */
+    transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), stroke 0.3s ease;
+}
+
+/* Эффект увеличения при ховере или активности */
+.nav-item:hover .nav-icon,
+.nav-item.active .nav-icon {
+    transform: scale(1.25); /* Ровно 30px визуально */
+}
+
+/* Смена цвета только при наведении или активности */
+.nav-item:hover .nav-icon,
+.nav-item.active .nav-icon {
+    stroke: var(--icon-accent);
+}
+
+/* Возвращаем дефолтный цвет для неактивных */
+.nav-item:not(.active):not(:hover) .nav-icon {
+    stroke: currentColor;
+}
+
+/* ========================================= */
+/* --- ОСНОВНАЯ ОБЛАСТЬ (Main Content) --- */
+/* ========================================= */
+.dashboard-content {
+    flex-grow: 1;
+    margin-left: 88px;
+    padding: 40px 50px;
+    overflow-y: auto;
+}
+
+/* --- Принудительное окрашивание сложных иконок --- */
+.nav-item:hover .nav-icon *,
+.nav-item.active .nav-icon * {
+    stroke: var(--icon-accent) !important;
+    fill: var(--icon-accent) !important;
+    color: var(--icon-accent) !important;
+}
+
+/* ========================================= */
+/* --- ВЕРХНЯЯ ПАНЕЛЬ (Header) --- */
+/* ========================================= */
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+    padding-bottom: 20px;
+}
+
+.header-greeting h2 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 2.2rem;
+    margin: 0 0 8px 0;
+    color: var(--text-primary);
+}
+
+.header-greeting p {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    opacity: 0.7;
+    margin: 0;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.search-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.search-icon {
+    position: absolute;
+    left: 16px;
+    width: 20px;
+    height: 20px;
+    color: var(--text-secondary);
+    opacity: 0.5;
+}
+
+.search-input {
+    width: 280px;
+    padding: 14px 20px 14px 46px;
+    border: none;
+    border-radius: 20px;
+    background-color: #ffffff;
+    font-family: var(--font-main);
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    box-shadow: 0 4px 15px rgba(12, 42, 54, 0.03);
+    transition: all 0.3s ease;
+}
+
+.search-input::placeholder {
+    color: var(--text-secondary);
+    opacity: 0.4;
+}
+
+.search-input:focus {
+    outline: none;
+    box-shadow: 0 4px 20px rgba(12, 42, 54, 0.08);
+    width: 320px;
+}
+
+.action-btn {
+    position: relative;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: #ffffff;
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    color: var(--text-secondary);
+    box-shadow: 0 4px 15px rgba(12, 42, 54, 0.03);
+    transition: all 0.3s ease;
+}
+
+.action-btn:hover {
+    box-shadow: 0 4px 20px rgba(12, 42, 54, 0.08);
+    color: var(--text-primary);
+}
+
+.action-btn svg {
+    width: 22px;
+    height: 22px;
+}
+
+.notification-badge {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    width: 10px;
+    height: 10px;
+    background-color: #f4a261;
+    border-radius: 50%;
+    border: 2px solid #ffffff;
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 16px 8px 8px;
+    background-color: #ffffff;
+    border-radius: 30px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(12, 42, 54, 0.03);
+    transition: all 0.3s ease;
+}
+
+.user-profile:hover {
+    box-shadow: 0 4px 20px rgba(12, 42, 54, 0.08);
+}
+
+.avatar-placeholder {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--text-primary);
+    color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 700;
+    font-size: 14px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.profile-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-name {
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--text-primary);
+}
+
+.profile-role {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    opacity: 0.6;
+}
+
+.dropdown-icon {
+    width: 18px;
+    height: 18px;
+    color: var(--text-secondary);
+    margin-left: 4px;
+    opacity: 0.5;
+}
+
+/* ========================================= */
+/* --- СЕТКА ВИДЖЕТОВ --- */
+/* ========================================= */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}

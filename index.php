@@ -5,13 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Блог Александра Ермакова</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400&family=Roboto:wght@100;300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/hero.css">
+    <link rel="stylesheet" href="css/dashboard.css">
 </head>
 <body>
 
-<section class="hero-section">
+<section class="hero-section" id="intro-screen">
     <div class="hero-content">
 
         <svg class="hero-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 208 202" version="1.1">
@@ -62,13 +64,142 @@
         <p class="hero-subtitle">Блог учителя информатики, робототехники и программирования</p>
     </div>
 
-    <a href="#about" class="scroll-indicator">
+    <a role="button" tabindex="0" class="scroll-indicator" id="enter-dash-btn" style="cursor: pointer;">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="6 9 12 15 18 9"></polyline>
         </svg>
     </a>
 <canvas id="wave-bg"></canvas>
 </section>
+
+<section class="dashboard-section" id="dashboard-screen" style="display: none;">
+
+        <!-- ДОБАВЛЕН КОНТЕЙНЕР-БОКС -->
+        <div class="dashboard-container">
+
+            <!-- Боковое меню -->
+            <aside class="sidebar">
+                <div class="logo-mini">
+                    <span class="logo-icon">AE</span>
+
+                </div>
+
+                <nav class="sidebar-nav">
+                    <a href="#" class="nav-item active">
+    <span class="material-symbols-rounded nav-icon">home</span>
+    <span class="nav-text">Главная</span>
+</a>
+
+<a href="#" class="nav-item">
+    <span class="material-symbols-rounded nav-icon">menu_book</span>
+    <span class="nav-text">Курсы</span>
+</a>
+
+<a href="#" class="nav-item">
+    <span class="material-symbols-rounded nav-icon">calendar_today</span>
+    <span class="nav-text">Расписание</span>
+</a>
+
+
+<a href="#" class="nav-item settings-item">
+    <span class="material-symbols-rounded nav-icon">display_settings</span>
+    <span class="nav-text">Настройки</span>
+</a>
+                </nav>
+            </aside>
+
+            <!-- Основной контент дашборда -->
+            <main class="dashboard-content">
+                <header class="dashboard-header">
+                    <!-- Левая часть: Приветствие -->
+                    <div class="header-greeting">
+                        <h2>Привет, Александр! 👋</h2>
+                        <p>Чем займемся сегодня?</p>
+                    </div>
+
+                    <!-- Правая часть: Инструменты и профиль -->
+                    <div class="header-actions">
+
+                        <!-- Строка поиска -->
+                        <div class="search-container">
+                            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            </svg>
+                            <input type="text" class="search-input" placeholder="Поиск курсов и материалов...">
+                        </div>
+
+                        <!-- Кнопка уведомлений -->
+                        <button class="action-btn notification-btn">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                                <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                            </svg>
+                            <span class="notification-badge"></span>
+                        </button>
+
+                        <!-- Профиль пользователя -->
+                        <div class="user-profile">
+                            <div class="avatar-placeholder">АЕ</div>
+                            <!-- Если есть картинка, используйте тег img ниже: -->
+                            <!-- <img src="images/avatar.jpg" alt="Александр Ермаков" class="profile-avatar"> -->
+                            <div class="profile-info">
+                                <span class="profile-name">Александр Е.</span>
+                                <span class="profile-role">Преподаватель</span>
+                            </div>
+                            <svg class="dropdown-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </div>
+
+                    </div>
+                </header>
+
+                <!-- Сетка для виджетов -->
+                <div class="dashboard-grid">
+                    <!-- Сюда будем добавлять карточки -->
+                </div>
+            </main>
+
+        </div> <!-- Конец .dashboard-container -->
+
+</section>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const introScreen = document.getElementById('intro-screen');
+        const dashboardScreen = document.getElementById('dashboard-screen');
+        // Обновляем ID на тот, который мы только что повесили на стрелочку
+        const enterBtn = document.getElementById('enter-dash-btn');
+
+        if (!sessionStorage.getItem('introSeen')) {
+            // Дашборд спрятан внизу.
+            dashboardScreen.style.display = 'flex';
+
+            // Ждем клика по стрелочке
+            enterBtn.addEventListener('click', () => {
+                sessionStorage.setItem('introSeen', 'true');
+
+                // Запускаем анимацию разъезда
+                introScreen.classList.add('slide-out');
+                dashboardScreen.classList.add('slide-in');
+
+                // Ждем 1.2 секунды и скрываем заставку
+                setTimeout(() => {
+                    introScreen.style.display = 'none';
+                }, 1200);
+            });
+
+        } else {
+            // Если обновили страницу
+            introScreen.style.display = 'none';
+
+            dashboardScreen.classList.add('no-transition');
+            dashboardScreen.style.display = 'flex';
+            dashboardScreen.classList.add('slide-in');
+        }
+    });
+</script>
 
 <script>
     document.addEventListener("DOMContentLoaded", () => {
