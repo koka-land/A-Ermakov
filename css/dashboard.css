@@ -76,8 +76,37 @@
     font-family: 'Montserrat', sans-serif;
     color: var(--text-primary);
     margin-bottom: 50px;
-    padding: 0 26px;
+    padding: 0 24px;
     white-space: nowrap;
+}
+
+/* --- Аватар в сайдбаре (заменяет логотип, служит входом в профиль) --- */
+.avatar-wrap {
+    position: relative;
+    display: inline-flex;
+    flex-shrink: 0;
+}
+
+.avatar-wrap .avatar-placeholder {
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+}
+
+.notification-dot {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #f4a261;
+    border: 2px solid #ffffff;
+    display: none;
+}
+
+.notification-dot.show {
+    display: block;
 }
 
 .logo-icon {
@@ -369,4 +398,166 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 30px;
+}
+
+/* ========================================= */
+/* --- ОВЕРЛЕЙ ПОИСКА --- */
+/* ========================================= */
+.search-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(12, 42, 54, 0.55);
+    backdrop-filter: blur(3px);
+    z-index: 200;
+
+    display: none;
+    align-items: center;      /* центр по вертикали */
+    justify-content: center;  /* центр по горизонтали */
+}
+
+.search-overlay.open {
+    display: flex;
+}
+
+.search-overlay .search-container {
+    width: min(560px, 90vw);
+}
+
+.search-overlay .search-input {
+    width: 100%;
+    padding: 18px 24px 18px 52px;
+    font-size: 1.05rem;
+    border-radius: 24px;
+    box-shadow: 0 20px 50px rgba(12, 42, 54, 0.3);
+}
+
+.search-overlay .search-icon {
+    left: 20px;
+    width: 22px;
+    height: 22px;
+}
+
+/* ========================================= */
+/* --- АДАПТИВ: ДО 992px (ноутбуки/планшеты/моб.) --- */
+/* ========================================= */
+@media (max-width: 992px) {
+
+    .sidebar {
+        display: none; /* rail скрываем, навигация уходит в нижнюю панель */
+    }
+
+    .dashboard-content {
+        margin-left: 0;
+        padding: 24px 20px 90px; /* запас снизу под bottom-bar */
+    }
+
+    .dashboard-container {
+        border-radius: 0;
+        width: 100%;
+        height: 100vh;
+    }
+
+    /* --- Нижняя панель --- */
+    .bottom-bar {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 150;
+        background-color: #ffffff;
+        border-top: 1px solid rgba(12, 42, 54, 0.08);
+        padding: 8px 6px calc(8px + env(safe-area-inset-bottom, 0px));
+        display: flex;
+    }
+
+    .bottom-item {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        background: none;
+        border: none;
+        color: var(--text-secondary);
+        opacity: 0.55;
+        font-family: var(--font-main);
+        font-size: 0.72rem;
+        padding: 6px 0;
+        cursor: pointer;
+    }
+
+    .bottom-item.active {
+        opacity: 1;
+        color: var(--text-primary);
+    }
+
+    .bottom-item .material-symbols-rounded {
+        font-size: 22px;
+    }
+
+    .bottom-item .avatar-wrap {
+        margin-bottom: 2px;
+    }
+
+    .bottom-item .avatar-placeholder {
+        width: 24px;
+        height: 24px;
+        font-size: 10px;
+    }
+
+    /* --- Полноэкранное меню --- */
+    .full-menu {
+        position: fixed;
+        inset: 0;
+        z-index: 250;
+        background-color: #ffffff;
+        display: none;
+        flex-direction: column;
+        padding: 24px 20px calc(24px + env(safe-area-inset-bottom, 0px));
+    }
+
+    .full-menu.open {
+        display: flex;
+    }
+
+    .full-menu-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+    }
+
+    .full-menu-head span {
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700;
+        font-size: 1.1rem;
+        color: var(--text-primary);
+    }
+
+    .full-menu-close {
+        font-size: 1.6rem;
+        color: var(--text-secondary);
+        cursor: pointer;
+        line-height: 1;
+    }
+
+    .full-menu .nav-item {
+        opacity: 1;
+        padding: 16px 8px;
+        border-bottom: 1px solid rgba(12, 42, 54, 0.06);
+        border-radius: 0;
+    }
+
+    .full-menu .nav-item .nav-text {
+        opacity: 1;
+        transform: none;
+        margin-left: 16px;
+    }
+}
+
+/* На десктопе (>992px) нижняя панель и полноэкранное меню не показываются */
+@media (min-width: 993px) {
+    .bottom-bar, .full-menu {
+        display: none;
+    }
 }

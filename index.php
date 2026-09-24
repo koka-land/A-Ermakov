@@ -80,12 +80,20 @@
             <!-- Боковое меню -->
             <aside class="sidebar">
                 <div class="logo-mini">
-                    <span class="logo-icon">AE</span>
-
+                    <!-- Аватар заменяет лого: точка входа в профиль + индикатор уведомления -->
+                    <div class="avatar-wrap">
+                        <div class="avatar-placeholder" id="sidebarAvatar">АЕ</div>
+                        <span class="notification-dot show" id="notifDot"></span>
+                    </div>
                 </div>
 
                 <nav class="sidebar-nav">
-                    <a href="#" class="nav-item active">
+                    <a href="#" class="nav-item" id="searchTrigger">
+    <span class="material-symbols-rounded nav-icon">search</span>
+    <span class="nav-text">Поиск</span>
+</a>
+
+<a href="#" class="nav-item active">
     <span class="material-symbols-rounded nav-icon">home</span>
     <span class="nav-text">Главная</span>
 </a>
@@ -108,58 +116,64 @@
                 </nav>
             </aside>
 
-            <!-- Основной контент дашборда -->
+            <!-- Основная область дашборда -->
             <main class="dashboard-content">
-                <header class="dashboard-header">
-                    <!-- Левая часть: Приветствие -->
-                    <div class="header-greeting">
-                        <h2>Привет, Александр! 👋</h2>
-                        <p>Чем займемся сегодня?</p>
-                    </div>
 
-                    <!-- Правая часть: Инструменты и профиль -->
-                    <div class="header-actions">
-
-                        <!-- Строка поиска -->
-                        <div class="search-container">
-                            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="11" cy="11" r="8"></circle>
-                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                            </svg>
-                            <input type="text" class="search-input" placeholder="Поиск курсов и материалов...">
-                        </div>
-
-                        <!-- Кнопка уведомлений -->
-                        <button class="action-btn notification-btn">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-                                <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-                            </svg>
-                            <span class="notification-badge"></span>
-                        </button>
-
-                        <!-- Профиль пользователя -->
-                        <div class="user-profile">
-                            <div class="avatar-placeholder">АЕ</div>
-                            <!-- Если есть картинка, используйте тег img ниже: -->
-                            <!-- <img src="images/avatar.jpg" alt="Александр Ермаков" class="profile-avatar"> -->
-                            <div class="profile-info">
-                                <span class="profile-name">Александр Е.</span>
-                                <span class="profile-role">Преподаватель</span>
-                            </div>
-                            <svg class="dropdown-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="6 9 12 15 18 9"></polyline>
-                            </svg>
-                        </div>
-
-                    </div>
-                </header>
-
-                <!-- Сетка для виджетов -->
-                <div class="dashboard-grid">
-                    <!-- Сюда будем добавлять карточки -->
-                </div>
             </main>
+
+            <!-- Оверлей поиска: строго по центру контейнера, и по горизонтали, и по вертикали -->
+            <div class="search-overlay" id="searchOverlay">
+                <div class="search-container">
+                    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    <input type="text" class="search-input" id="searchInputModal" placeholder="Поиск курсов и материалов...">
+                </div>
+            </div>
+
+            <!-- Нижняя панель: показывается только до 992px, вместо rail-сайдбара -->
+            <nav class="bottom-bar">
+                <button class="bottom-item active">
+                    <span class="material-symbols-rounded">home</span>
+                    Главная
+                </button>
+                <button class="bottom-item">
+                    <span class="material-symbols-rounded">menu_book</span>
+                    Курсы
+                </button>
+                <button class="bottom-item" id="bottomProfileBtn">
+                    <span class="avatar-wrap">
+                        <span class="avatar-placeholder">АЕ</span>
+                        <span class="notification-dot show"></span>
+                    </span>
+                    Профиль
+                </button>
+                <button class="bottom-item" id="openFullMenuBtn">
+                    <span class="material-symbols-rounded">menu</span>
+                    Меню
+                </button>
+            </nav>
+
+            <!-- Полноэкранное меню: Поиск, Расписание, Настройки -->
+            <div class="full-menu" id="fullMenu">
+                <div class="full-menu-head">
+                    <span>Меню</span>
+                    <span class="full-menu-close" id="closeFullMenuBtn">&#10005;</span>
+                </div>
+                <a href="#" class="nav-item" id="fullMenuSearch">
+                    <span class="material-symbols-rounded nav-icon">search</span>
+                    <span class="nav-text">Поиск</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <span class="material-symbols-rounded nav-icon">calendar_today</span>
+                    <span class="nav-text">Расписание</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <span class="material-symbols-rounded nav-icon">display_settings</span>
+                    <span class="nav-text">Настройки</span>
+                </a>
+            </div>
 
         </div> <!-- Конец .dashboard-container -->
 
@@ -219,6 +233,55 @@
             }
             titleElement.appendChild(span);
         });
+    });
+</script>
+
+<!-- Оверлей поиска: открытие/закрытие -->
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const overlay = document.getElementById('searchOverlay');
+        const input = document.getElementById('searchInputModal');
+        // Поиск можно открыть и из rail (десктоп), и из полноэкранного меню (моб./ноутбук)
+        const triggers = [document.getElementById('searchTrigger'), document.getElementById('fullMenuSearch')].filter(Boolean);
+
+        function openSearch(e) {
+            e.preventDefault();
+            document.getElementById('fullMenu').classList.remove('open');
+            overlay.classList.add('open');
+            input.focus();
+        }
+        function closeSearch() {
+            overlay.classList.remove('open');
+            input.value = '';
+        }
+
+        triggers.forEach(t => t.addEventListener('click', openSearch));
+
+        // Закрытие по клику на затемнённый фон (не по самому полю ввода)
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) closeSearch();
+        });
+
+        // Закрытие по Esc
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && overlay.classList.contains('open')) closeSearch();
+        });
+    });
+</script>
+
+<!-- Мобильное/ноутбучное меню (до 992px): открытие и закрытие бургера -->
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const fullMenu = document.getElementById('fullMenu');
+        const openBtn = document.getElementById('openFullMenuBtn');
+        const closeBtn = document.getElementById('closeFullMenuBtn');
+        const profileBtn = document.getElementById('bottomProfileBtn');
+
+        openBtn.addEventListener('click', () => fullMenu.classList.add('open'));
+        closeBtn.addEventListener('click', () => fullMenu.classList.remove('open'));
+        // По клику на «Профиль» в нижней панели — тоже открываем меню (демо-заглушка,
+        // в финале здесь может быть отдельный дропдаун профиля)
+        profileBtn.addEventListener('click', () => fullMenu.classList.add('open'));
     });
 </script>
 
