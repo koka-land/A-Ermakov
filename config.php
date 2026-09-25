@@ -34,4 +34,4 @@ define('ADMIN_USERNAME', 'admin');
 // Хеш пароля. Сгенерируйте свой командой в терминале хостинга или локально:
 //   php -r "echo password_hash('ваш_пароль', PASSWORD_DEFAULT);"
 // и вставьте результат сюда вместо строки ниже.
-define('ADMIN_PASSWORD_HASH', 'ВСТАВЬТЕ_СЮДА_СГЕНЕРИРОВАННЫЙ_ХЕШ');
+define('ADMIN_PASSWORD_HASH', '$2y$10$3al1A7.umebZCnFzOEx7pu.eYerMBdJjjl2QkEZmP2vLYKj1UOzoq');
