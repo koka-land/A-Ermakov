@@ -23,7 +23,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Вход в админку</title>
 <link rel="stylesheet" href="/css/style.css">
-<link rel="stylesheet" href="/css/dashboard.css">
 <style>
   .login-box{
     max-width:360px;width:90%;background:#fff;border-radius:16px;
@@ -43,7 +42,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
   <div class="page-frame">
-    <div class="dashboard-container centered">
       <div class="login-box">
         <h1>Вход в админку</h1>
         <?php if ($error): ?><p class="login-error"><?= htmlspecialchars($error) ?></p><?php endif; ?>
@@ -53,7 +51,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           <button type="submit">Войти</button>
         </form>
       </div>
-    </div>
   </div>
 </body>
 </html>
