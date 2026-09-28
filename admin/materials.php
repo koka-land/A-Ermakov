@@ -1,143 +1,70 @@
 <?php
 require_once __DIR__ . '/auth.php';
 
-$id = isset($_GET['id']) ? (int) $_GET['id'] : null;
-$material = null;
-
-if ($id) {
-    $stmt = $pdo->prepare("SELECT * FROM materials WHERE id = ?");
-    $stmt->execute([$id]);
-    $material = $stmt->fetch();
-    if (!$material) {
-        die('Материал не найден');
-    }
-}
+$materials = $pdo->query(
+    "SELECT id, title, slug, status, updated_at FROM materials ORDER BY updated_at DESC"
+)->fetchAll();
 ?>
 <!DOCTYPE html>
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title><?= $material ? 'Редактирование' : 'Новая статья' ?></title>
+<title>Материалы — админка</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400&family=Roboto:wght@100;300;400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/css/style.css">
 <link rel="stylesheet" href="/css/dashboard.css">
 <style>
-  body{padding:0;}
-  .editor-topbar{
-    background:#fff;
-    display:flex;justify-content:space-between;align-items:center;
-    padding:16px 32px;border-bottom:1px solid rgba(12,42,54,.06);
-    flex-shrink:0;
+  .wrap{max-width:900px;margin:0 auto;padding:40px 32px;}
+  .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;}
+  h1{font-size:1.5rem;margin:0;}
+  .btn{
+    background:var(--text-primary);color:#fff;padding:10px 18px;border-radius:10px;
+    text-decoration:none;font-weight:600;font-size:.9rem;
   }
-  .editor-topbar input[type="text"]{
-    font-family:var(--font-main);font-size:1.1rem;font-weight:700;
-    border:none;outline:none;color:var(--text-primary);width:60%;
-  }
-  .editor-topbar input[type="text"]::placeholder{color:rgba(12,42,54,.3);}
-  .actions{display:flex;gap:10px;align-items:center;}
-  .actions select, .actions button{
-    font-family:var(--font-main);font-size:.85rem;padding:9px 14px;border-radius:8px;
-    border:1px solid rgba(12,42,54,.15);background:#fff;cursor:pointer;
-  }
-  .actions button.primary{background:var(--text-primary);color:#fff;border:none;font-weight:600;}
-  #save-status{font-size:.8rem;color:var(--text-secondary);margin-right:6px;}
-  .editor-wrap{max-width:720px;margin:40px auto 100px;padding:0 20px;}
-  .codex-editor{font-family:var(--font-main);}
-  a.back{color:var(--text-secondary);text-decoration:none;font-size:.85rem;margin-right:16px;}
+  table{width:100%;border-collapse:collapse;background:#fff;border-radius:14px;overflow:hidden;}
+  th,td{text-align:left;padding:14px 16px;border-bottom:1px solid rgba(12,42,54,.06);font-size:.92rem;}
+  th{color:var(--text-secondary);font-weight:600;font-size:.8rem;text-transform:uppercase;letter-spacing:.03em;}
+  .status{padding:3px 10px;border-radius:20px;font-size:.75rem;font-weight:600;}
+  .status.draft{background:rgba(244,162,97,.15);color:#f4a261;}
+  .status.published{background:rgba(42,157,143,.15);color:#2a9d8f;}
+  a.row-link{color:var(--text-primary);text-decoration:none;font-weight:600;}
+  .empty{padding:40px;text-align:center;color:var(--text-secondary);}
+  .logout{color:var(--text-secondary);font-size:.85rem;text-decoration:none;margin-left:16px;}
 </style>
 </head>
 <body>
-
 <div class="page-frame">
 <div class="dashboard-container">
-<div class="full-page">
-  <div class="editor-topbar">
-    <div style="display:flex;align-items:center;">
-      <a class="back" href="/admin/materials.php">← Материалы</a>
-      <input type="text" id="material-title" placeholder="Заголовок статьи…"
-             value="<?= $material ? htmlspecialchars($material['title']) : '' ?>">
-    </div>
-    <div class="actions">
-      <span id="save-status"></span>
-      <select id="material-status">
-        <option value="draft" <?= (!$material || $material['status'] === 'draft') ? 'selected' : '' ?>>Черновик</option>
-        <option value="published" <?= ($material && $material['status'] === 'published') ? 'selected' : '' ?>>Опубликовано</option>
-      </select>
-      <button class="primary" id="save-btn">Сохранить</button>
-    </div>
-  </div>
-
+  <div class="full-page">
   <div class="full-page-scroll">
-    <div class="editor-wrap">
-      <div id="editorjs"></div>
+    <div class="wrap">
+      <div class="top">
+        <h1>Материалы</h1>
+        <div>
+          <a class="btn" href="/admin/editor.php">+ Новая статья</a>
+          <a class="logout" href="/admin/logout.php">Выйти</a>
+        </div>
+      </div>
+
+      <?php if (!$materials): ?>
+        <div class="empty">Материалов пока нет — начните с «+ Новая статья».</div>
+      <?php else: ?>
+      <table>
+        <tr><th>Заголовок</th><th>Статус</th><th>Обновлено</th></tr>
+        <?php foreach ($materials as $m): ?>
+        <tr>
+          <td><a class="row-link" href="/admin/editor.php?id=<?= $m['id'] ?>"><?= htmlspecialchars($m['title']) ?></a></td>
+          <td><span class="status <?= $m['status'] ?>"><?= $m['status'] === 'published' ? 'Опубликовано' : 'Черновик' ?></span></td>
+          <td><?= htmlspecialchars($m['updated_at']) ?></td>
+        </tr>
+        <?php endforeach; ?>
+      </table>
+      <?php endif; ?>
     </div>
+  </div>
   </div>
 </div>
 </div>
-</div>
-
-<!-- Editor.js и нужные блоки — только текст/код/списки, без загрузки картинок (пока) -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/editorjs/2.29.1/editorjs.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/editorjs-header/2.8.1/header.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/editorjs-list/1.9.0/list.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/editorjs-code/2.9.0/code.umd.min.js"></script>
-
-<script>
-  const existingContent = <?= $material ? $material['content'] : 'null' ?>;
-
-  const editor = new EditorJS({
-    holder: 'editorjs',
-    placeholder: 'Начните писать статью…',
-    data: existingContent || undefined,
-    tools: {
-      header: { class: Header, config: { levels: [2, 3], defaultLevel: 2 } },
-      list: { class: List, inlineToolbar: true },
-      code: { class: CodeTool }
-    }
-  });
-
-  const saveBtn = document.getElementById('save-btn');
-  const statusEl = document.getElementById('save-status');
-  const materialId = <?= $material ? $material['id'] : 'null' ?>;
-
-  saveBtn.addEventListener('click', async () => {
-    const title = document.getElementById('material-title').value.trim();
-    if (!title) {
-      alert('Добавьте заголовок статьи');
-      return;
-    }
-
-    statusEl.textContent = 'Сохранение…';
-    const content = await editor.save();
-
-    try {
-      const res = await fetch('/admin/api/save.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          id: materialId,
-          title,
-          status: document.getElementById('material-status').value,
-          content
-        })
-      });
-      const data = await res.json();
-
-      if (data.ok) {
-        statusEl.textContent = 'Сохранено';
-        if (!materialId) {
-          // Новый материал — переходим в режим редактирования с полученным id
-          window.location.href = '/admin/editor.php?id=' + data.id;
-        }
-      } else {
-        statusEl.textContent = '';
-        alert('Ошибка сохранения: ' + (data.error || 'неизвестная'));
-      }
-    } catch (err) {
-      statusEl.textContent = '';
-      alert('Не удалось сохранить: ' + err.message);
-    }
-  });
-</script>
 </body>
 </html>
