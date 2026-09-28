@@ -18,6 +18,15 @@ body, html {
     box-sizing: inherit;
 }
 
+/* Центрирует .dashboard-container на самостоятельных страницах
+   (вход, список материалов, редактор) — без fixed/slide-in логики хero-секции */
+.page-frame {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 /* Отключаем анимации для людей, которые настроили это в системе */
 @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {

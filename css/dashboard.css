@@ -145,7 +145,7 @@
     color: var(--text-secondary);
     opacity: 0.5;
     padding: 14px 16px;
-    border-radius: 45px;
+    border-radius: 12px;
     transition: all 0.3s ease;
     white-space: nowrap;
 }
@@ -279,7 +279,7 @@
     width: 280px;
     padding: 14px 20px 14px 46px;
     border: none;
-    border-radius: 45px;
+    border-radius: 20px;
     background-color: #ffffff;
     font-family: var(--font-main);
     font-size: 0.95rem;
@@ -303,7 +303,7 @@
     position: relative;
     width: 48px;
     height: 48px;
-    border-radius: 45px;
+    border-radius: 50%;
     background-color: #ffffff;
     border: none;
     display: flex;
@@ -332,7 +332,7 @@
     width: 10px;
     height: 10px;
     background-color: #f4a261;
-    border-radius: 45px;
+    border-radius: 50%;
     border: 2px solid #ffffff;
 }
 
@@ -342,7 +342,7 @@
     gap: 12px;
     padding: 8px 16px 8px 8px;
     background-color: #ffffff;
-    border-radius: 45px;
+    border-radius: 30px;
     cursor: pointer;
     box-shadow: 0 4px 15px rgba(12, 42, 54, 0.03);
     transition: all 0.3s ease;
@@ -355,7 +355,7 @@
 .avatar-placeholder {
     width: 40px;
     height: 40px;
-    border-radius: 45px;
+    border-radius: 50%;
     background-color: var(--text-primary);
     color: #ffffff;
     display: flex;
@@ -560,4 +560,29 @@
     .bottom-bar, .full-menu {
         display: none;
     }
+}
+
+/* ========================================= */
+/* --- ПЕРЕИСПОЛЬЗОВАНИЕ .dashboard-container НА ДРУГИХ СТРАНИЦАХ --- */
+/* (вход, список материалов, редактор — то же окно, без Hero-секции) */
+/* ========================================= */
+
+/* Для страниц без sidebar: единственный ребёнок должен занимать всё окно */
+.dashboard-container > .full-page {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* Центрирование содержимого внутри окна (например, форма входа) */
+.dashboard-container.centered {
+    align-items: center;
+    justify-content: center;
+}
+
+/* Скроллящаяся часть внутри окна фиксированного размера */
+.full-page-scroll {
+    flex: 1;
+    overflow-y: auto;
 }
