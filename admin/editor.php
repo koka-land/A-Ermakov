@@ -12,6 +12,35 @@ if ($id) {
         die('Материал не найден');
     }
 }
+
+// --- Категории материала (чекбоксы, с отступом по вложенности) ---
+$allCategories = $pdo->query("SELECT * FROM categories ORDER BY name")->fetchAll();
+$byParent = [];
+foreach ($allCategories as $cat) {
+    $byParent[$cat['parent_id']][] = $cat;
+}
+
+function flattenCategories(array $byParent, $parentId, int $depth = 0): array
+{
+    $result = [];
+    foreach ($byParent[$parentId] ?? [] as $cat) {
+        $cat['depth'] = $depth;
+        $result[] = $cat;
+        $result = array_merge($result, flattenCategories($byParent, $cat['id'], $depth + 1));
+    }
+    return $result;
+}
+$flatCategories = flattenCategories($byParent, null);
+
+$selectedCategoryIds = [];
+if ($material) {
+    $stmt = $pdo->prepare("SELECT category_id FROM material_categories WHERE material_id = ?");
+    $stmt->execute([$material['id']]);
+    $selectedCategoryIds = array_column($stmt->fetchAll(), 'category_id');
+} elseif (isset($_GET['category'])) {
+    // Новый материал, открытый из конкретной категории — сразу отмечаем её
+    $selectedCategoryIds = [(int) $_GET['category']];
+}
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -49,6 +78,23 @@ if ($id) {
 
   <div class="full-page-scroll">
     <div class="editor-wrap">
+
+      <div class="cat-picker">
+        <span class="cat-picker-label">Категории:</span>
+        <?php if (!$flatCategories): ?>
+          <span class="cat-hint">Категорий пока нет — создайте их на странице «Категории».</span>
+        <?php else: ?>
+          <?php foreach ($flatCategories as $cat): ?>
+            <label class="cat-checkbox" style="margin-left:<?= $cat['depth'] * 16 ?>px;">
+              <input type="checkbox" name="categories[]" value="<?= $cat['id'] ?>"
+                <?= in_array($cat['id'], $selectedCategoryIds) ? 'checked' : '' ?>>
+              <span class="material-symbols-rounded cat-checkbox-icon"><?= htmlspecialchars($cat['icon']) ?></span>
+              <?= htmlspecialchars($cat['name']) ?>
+            </label>
+          <?php endforeach; ?>
+        <?php endif; ?>
+      </div>
+
       <div id="editorjs"></div>
     </div>
   </div>
@@ -89,6 +135,9 @@ if ($id) {
 
     statusEl.textContent = 'Сохранение…';
     const content = await editor.save();
+    const categories = Array.from(
+      document.querySelectorAll('input[name="categories[]"]:checked')
+    ).map(cb => parseInt(cb.value, 10));
 
     try {
       const res = await fetch('/admin/api/save.php', {
@@ -98,7 +147,8 @@ if ($id) {
           id: materialId,
           title,
           status: document.getElementById('material-status').value,
-          content
+          content,
+          categories
         })
       });
       const data = await res.json();

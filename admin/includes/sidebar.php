@@ -18,6 +18,11 @@
             <span class="nav-text">Материалы</span>
         </a>
 
+        <a href="/admin/categories.php" class="nav-item <?= $current === 'categories.php' ? 'active' : '' ?>">
+            <span class="material-symbols-rounded nav-icon">category</span>
+            <span class="nav-text">Категории</span>
+        </a>
+
         <a href="#" class="nav-item settings-item">
             <span class="material-symbols-rounded nav-icon">display_settings</span>
             <span class="nav-text">Настройки</span>

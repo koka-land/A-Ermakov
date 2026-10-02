@@ -1,9 +1,59 @@
 <?php
 require_once __DIR__ . '/auth.php';
 
-$materials = $pdo->query(
-    "SELECT id, title, slug, status, updated_at FROM materials ORDER BY updated_at DESC"
-)->fetchAll();
+$categoryId = isset($_GET['category']) ? (int) $_GET['category'] : null;
+
+// --- Текущая категория + хлебные крошки ---
+$breadcrumb = [];
+$currentCategory = null;
+
+if ($categoryId) {
+    $stmt = $pdo->prepare("SELECT * FROM categories WHERE id = ?");
+    $stmt->execute([$categoryId]);
+    $currentCategory = $stmt->fetch();
+
+    if (!$currentCategory) {
+        $categoryId = null;
+    } else {
+        $node = $currentCategory;
+        while ($node) {
+            array_unshift($breadcrumb, $node);
+            if (!$node['parent_id']) break;
+            $stmt = $pdo->prepare("SELECT * FROM categories WHERE id = ?");
+            $stmt->execute([$node['parent_id']]);
+            $node = $stmt->fetch();
+        }
+    }
+}
+
+// --- Подкатегории текущего уровня ---
+if ($categoryId) {
+    $stmt = $pdo->prepare("SELECT * FROM categories WHERE parent_id = ? ORDER BY name");
+    $stmt->execute([$categoryId]);
+} else {
+    $stmt = $pdo->query("SELECT * FROM categories WHERE parent_id IS NULL ORDER BY name");
+}
+$subcategories = $stmt->fetchAll();
+
+// --- Материалы текущего уровня ---
+if ($categoryId) {
+    $stmt = $pdo->prepare(
+        "SELECT m.* FROM materials m
+         JOIN material_categories mc ON mc.material_id = m.id
+         WHERE mc.category_id = ?
+         ORDER BY m.updated_at DESC"
+    );
+    $stmt->execute([$categoryId]);
+} else {
+    // На верхнем уровне — материалы без единой категории
+    $stmt = $pdo->query(
+        "SELECT m.* FROM materials m
+         LEFT JOIN material_categories mc ON mc.material_id = m.id
+         WHERE mc.material_id IS NULL
+         ORDER BY m.updated_at DESC"
+    );
+}
+$materials = $stmt->fetchAll();
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -23,32 +73,51 @@ $materials = $pdo->query(
 <?php include __DIR__ . '/includes/sidebar.php'; ?>
   <div class="full-page">
   <div class="full-page-scroll">
-    <div class="wrap">
+    <div class="wrap wrap-full">
+
       <div class="top">
+        <h1>Материалы</h1>
         <div>
-          <a class="back" href="/admin/dashboard.php">← Дашборд</a>
-          <h1 style="display:inline;">Материалы</h1>
-        </div>
-        <div>
-          <a class="btn" href="/admin/editor.php">+ Новая статья</a>
+          <a class="btn" href="/admin/editor.php<?= $categoryId ? '?category=' . $categoryId : '' ?>">+ Новая статья</a>
           <a class="logout" href="/admin/logout.php">Выйти</a>
         </div>
       </div>
 
-      <?php if (!$materials): ?>
-        <div class="empty">Материалов пока нет — начните с «+ Новая статья».</div>
-      <?php else: ?>
-      <table>
-        <tr><th>Заголовок</th><th>Статус</th><th>Обновлено</th></tr>
-        <?php foreach ($materials as $m): ?>
-        <tr>
-          <td><a class="row-link" href="/admin/editor.php?id=<?= $m['id'] ?>"><?= htmlspecialchars($m['title']) ?></a></td>
-          <td><span class="status <?= $m['status'] ?>"><?= $m['status'] === 'published' ? 'Опубликовано' : 'Черновик' ?></span></td>
-          <td><?= htmlspecialchars($m['updated_at']) ?></td>
-        </tr>
+      <div class="breadcrumb">
+        <a href="/admin/materials.php">Все материалы</a>
+        <?php foreach ($breadcrumb as $node): ?>
+          <span>/</span>
+          <a href="/admin/materials.php?category=<?= $node['id'] ?>"><?= htmlspecialchars($node['name']) ?></a>
         <?php endforeach; ?>
-      </table>
+      </div>
+
+      <?php if ($subcategories): ?>
+        <h2 class="section-title">Разделы</h2>
+        <div class="box-grid">
+          <?php foreach ($subcategories as $cat): ?>
+            <a class="box-card" href="/admin/materials.php?category=<?= $cat['id'] ?>">
+              <span class="material-symbols-rounded box-icon"><?= htmlspecialchars($cat['icon']) ?></span>
+              <span class="box-title"><?= htmlspecialchars($cat['name']) ?></span>
+            </a>
+          <?php endforeach; ?>
+        </div>
       <?php endif; ?>
+
+      <h2 class="section-title">Материалы<?= $categoryId ? '' : ' без категории' ?></h2>
+      <?php if (!$materials): ?>
+        <div class="empty">Материалов здесь пока нет.</div>
+      <?php else: ?>
+        <div class="box-grid">
+          <?php foreach ($materials as $m): ?>
+            <a class="box-card material" href="/admin/editor.php?id=<?= $m['id'] ?>">
+              <span class="material-symbols-rounded box-icon">description</span>
+              <span class="box-title"><?= htmlspecialchars($m['title']) ?></span>
+              <span class="status <?= $m['status'] ?>"><?= $m['status'] === 'published' ? 'Опубликовано' : 'Черновик' ?></span>
+            </a>
+          <?php endforeach; ?>
+        </div>
+      <?php endif; ?>
+
     </div>
   </div>
   </div>

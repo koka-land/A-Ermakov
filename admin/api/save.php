@@ -5,10 +5,11 @@ header('Content-Type: application/json; charset=utf-8');
 
 $input = json_decode(file_get_contents('php://input'), true);
 
-$id      = isset($input['id']) ? (int) $input['id'] : null;
-$title   = trim($input['title'] ?? '');
-$status  = in_array($input['status'] ?? '', ['draft', 'published'], true) ? $input['status'] : 'draft';
-$content = $input['content'] ?? null;
+$id         = isset($input['id']) ? (int) $input['id'] : null;
+$title      = trim($input['title'] ?? '');
+$status     = in_array($input['status'] ?? '', ['draft', 'published'], true) ? $input['status'] : 'draft';
+$content    = $input['content'] ?? null;
+$categories = array_map('intval', $input['categories'] ?? []);
 
 if ($title === '' || !$content) {
     echo json_encode(['ok' => false, 'error' => 'Не хватает заголовка или контента']);
@@ -45,12 +46,24 @@ function makeSlug(string $title, PDO $pdo, ?int $excludeId): string
     return $slug;
 }
 
+function syncCategories(PDO $pdo, int $materialId, array $categoryIds): void
+{
+    $pdo->prepare("DELETE FROM material_categories WHERE material_id = ?")->execute([$materialId]);
+    if (!$categoryIds) return;
+
+    $stmt = $pdo->prepare("INSERT IGNORE INTO material_categories (material_id, category_id) VALUES (?, ?)");
+    foreach (array_unique($categoryIds) as $catId) {
+        $stmt->execute([$materialId, $catId]);
+    }
+}
+
 try {
     if ($id) {
         $stmt = $pdo->prepare(
             "UPDATE materials SET title = ?, content = ?, status = ? WHERE id = ?"
         );
         $stmt->execute([$title, $contentJson, $status, $id]);
+        syncCategories($pdo, $id, $categories);
         echo json_encode(['ok' => true, 'id' => $id]);
     } else {
         $slug = makeSlug($title, $pdo, null);
@@ -58,7 +71,9 @@ try {
             "INSERT INTO materials (type, title, slug, content, status) VALUES ('article', ?, ?, ?, ?)"
         );
         $stmt->execute([$title, $slug, $contentJson, $status]);
-        echo json_encode(['ok' => true, 'id' => $pdo->lastInsertId()]);
+        $newId = (int) $pdo->lastInsertId();
+        syncCategories($pdo, $newId, $categories);
+        echo json_encode(['ok' => true, 'id' => $newId]);
     }
 } catch (PDOException $e) {
     echo json_encode(['ok' => false, 'error' => $e->getMessage()]);
