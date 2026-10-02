@@ -58,18 +58,9 @@ foreach ($content['blocks'] ?? [] as $block) {
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title><?= htmlspecialchars($article['title']) ?></title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400&family=Roboto:wght@100;300;400;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/css/style.css">
-<style>
-  .article-wrap{max-width:680px;margin:60px auto;padding:0 20px;}
-  .article-wrap h1{font-family:'Montserrat',sans-serif;font-weight:700;font-size:2.1rem;margin-bottom:8px;}
-  .article-body h2{font-size:1.4rem;margin-top:2em;}
-  .article-body h3{font-size:1.15rem;margin-top:1.6em;}
-  .article-body p{line-height:1.7;font-size:1.02rem;}
-  .article-code{
-    background:#0c2a36;color:#dce8ec;padding:16px 18px;border-radius:10px;
-    overflow-x:auto;font-family:'JetBrains Mono',monospace;font-size:.88rem;line-height:1.6;
-  }
-</style>
+<link rel="stylesheet" href="/css/articles.css">
 </head>
 <body>
   <div class="article-wrap">
