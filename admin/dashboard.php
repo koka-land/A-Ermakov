@@ -27,7 +27,7 @@ $recent = $pdo->query(
 <?php include __DIR__ . '/includes/sidebar.php'; ?>
   <div class="full-page">
   <div class="full-page-scroll">
-    <div class="wrap">
+    <div class="wrap wrap-full">
 
       <div class="top">
         <h1>Дашборд</h1>

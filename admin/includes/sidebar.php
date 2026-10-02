@@ -1,285 +1,80 @@
-/* ========================================= */
-/* --- АДМИНКА: стили страниц входа, списка и редактора --- */
-/* Подключается после style.css (и dashboard.css там, где есть окно) */
-/* ========================================= */
+<?php
+require_once __DIR__ . '/auth.php';
 
+$total     = (int) $pdo->query("SELECT COUNT(*) AS c FROM materials")->fetch()['c'];
+$published = (int) $pdo->query("SELECT COUNT(*) AS c FROM materials WHERE status = 'published'")->fetch()['c'];
+$drafts    = (int) $pdo->query("SELECT COUNT(*) AS c FROM materials WHERE status = 'draft'")->fetch()['c'];
 
-/* ========================================= */
-/* --- ВХОД (login.php) --- */
-/* ========================================= */
-.login-box {
-    max-width: 360px;
-    width: 90%;
-    background: #fff;
-    border-radius: 16px;
-    padding: 36px 32px;
-    box-shadow: 0 10px 30px rgba(12, 42, 54, 0.08);
-}
+$recent = $pdo->query(
+    "SELECT id, title, status, updated_at FROM materials ORDER BY updated_at DESC LIMIT 5"
+)->fetchAll();
+?>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Дашборд — админка</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400&family=Roboto:wght@100;300;400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/dashboard.css">
+<link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+<div class="page-frame">
+<div class="dashboard-container">
+<?php include __DIR__ . '/includes/sidebar.php'; ?>
+  <div class="full-page">
+  <div class="full-page-scroll">
+    <div class="wrap wrap-full">
 
-.login-box h1 {
-    font-size: 1.3rem;
-    margin: 0 0 20px;
-    color: var(--text-primary);
-}
+      <div class="top">
+        <h1>Дашборд</h1>
+        <a class="logout" href="/admin/logout.php">Выйти</a>
+      </div>
 
-.login-box input {
-    width: 100%;
-    padding: 12px 14px;
-    margin-bottom: 14px;
-    border: 1px solid rgba(12, 42, 54, 0.15);
-    border-radius: 10px;
-    font-family: var(--font-main);
-    font-size: 0.95rem;
-    box-sizing: border-box;
-}
+      <div class="dashboard-grid" style="margin-bottom:32px;">
+        <div class="stat-card">
+          <span class="stat-value"><?= $total ?></span>
+          <span class="stat-label">Всего материалов</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-value published"><?= $published ?></span>
+          <span class="stat-label">Опубликовано</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-value draft"><?= $drafts ?></span>
+          <span class="stat-label">Черновики</span>
+        </div>
+      </div>
 
-.login-box button {
-    width: 100%;
-    padding: 12px;
-    border: none;
-    border-radius: 10px;
-    background: var(--text-primary);
-    color: #fff;
-    font-family: var(--font-main); /* кнопки не наследуют шрифт сами */
-    font-weight: 700;
-    font-size: 0.95rem;
-    cursor: pointer;
-}
+      <div class="quick-actions">
+        <a class="btn" href="/admin/editor.php">+ Новая статья</a>
+        <a class="btn secondary" href="/admin/materials.php">Все материалы →</a>
+      </div>
 
-.login-error {
-    color: #e76f51;
-    font-size: 0.85rem;
-    margin: -6px 0 14px;
-}
+      <h2 class="section-title">Недавно изменённые</h2>
 
-.back-to-site {
-    display: block;
-    text-align: center;
-    margin-top: 16px;
-    color: var(--text-secondary);
-    font-size: 0.85rem;
-    text-decoration: none;
-    opacity: 0.75;
-}
+      <?php if (!$recent): ?>
+        <div class="empty">Материалов пока нет — начните с «+ Новая статья».</div>
+      <?php else: ?>
+      <table>
+        <tr><th>Заголовок</th><th>Статус</th><th>Обновлено</th></tr>
+        <?php foreach ($recent as $m): ?>
+        <tr>
+          <td><a class="row-link" href="/admin/editor.php?id=<?= $m['id'] ?>"><?= htmlspecialchars($m['title']) ?></a></td>
+          <td><span class="status <?= $m['status'] ?>"><?= $m['status'] === 'published' ? 'Опубликовано' : 'Черновик' ?></span></td>
+          <td><?= htmlspecialchars($m['updated_at']) ?></td>
+        </tr>
+        <?php endforeach; ?>
+      </table>
+      <?php endif; ?>
 
-.back-to-site:hover {
-    opacity: 1;
-}
-
-
-/* ========================================= */
-/* --- ДАШБОРД (dashboard.php) --- */
-/* ========================================= */
-.stat-card {
-    background: #fff;
-    border-radius: 14px;
-    padding: 20px 22px;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.stat-value {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    font-size: 2rem;
-    color: var(--text-primary);
-}
-
-.stat-value.published { color: #2a9d8f; }
-.stat-value.draft { color: #f4a261; }
-
-.stat-label {
-    font-size: 0.85rem;
-    color: var(--text-secondary);
-}
-
-.quick-actions {
-    display: flex;
-    gap: 12px;
-    margin-bottom: 36px;
-}
-
-.btn.secondary {
-    background: #fff;
-    color: var(--text-primary);
-    border: 1px solid rgba(12, 42, 54, 0.15);
-}
-
-.section-title {
-    font-size: 1.05rem;
-    color: var(--text-primary);
-    margin: 0 0 14px;
-}
-
-
-/* ========================================= */
-/* --- СПИСОК МАТЕРИАЛОВ (materials.php) --- */
-/* ========================================= */
-.wrap {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 40px 32px;
-}
-
-/* Для дашборда — на всю доступную ширину окна, без узкой колонки */
-.wrap.wrap-full {
-    max-width: none;
-}
-
-.wrap h1 {
-    font-size: 1.5rem;
-    margin: 0;
-}
-
-.top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 24px;
-}
-
-.btn {
-    background: var(--text-primary);
-    color: #fff;
-    padding: 10px 18px;
-    border-radius: 10px;
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 0.9rem;
-}
-
-.wrap table {
-    width: 100%;
-    border-collapse: collapse;
-    background: #fff;
-    border-radius: 14px;
-    overflow: hidden;
-}
-
-.wrap th,
-.wrap td {
-    text-align: left;
-    padding: 14px 16px;
-    border-bottom: 1px solid rgba(12, 42, 54, 0.06);
-    font-size: 0.92rem;
-}
-
-.wrap th {
-    color: var(--text-secondary);
-    font-weight: 600;
-    font-size: 0.8rem;
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-}
-
-.status {
-    padding: 3px 10px;
-    border-radius: 20px;
-    font-size: 0.75rem;
-    font-weight: 600;
-}
-
-.status.draft {
-    background: rgba(244, 162, 97, 0.15);
-    color: #f4a261;
-}
-
-.status.published {
-    background: rgba(42, 157, 143, 0.15);
-    color: #2a9d8f;
-}
-
-a.row-link {
-    color: var(--text-primary);
-    text-decoration: none;
-    font-weight: 600;
-}
-
-.empty {
-    padding: 40px;
-    text-align: center;
-    color: var(--text-secondary);
-}
-
-.logout {
-    color: var(--text-secondary);
-    font-size: 0.85rem;
-    text-decoration: none;
-    margin-left: 16px;
-}
-
-
-/* ========================================= */
-/* --- РЕДАКТОР (editor.php) --- */
-/* ========================================= */
-.editor-topbar {
-    background: #fff;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 16px 32px;
-    border-bottom: 1px solid rgba(12, 42, 54, 0.06);
-    flex-shrink: 0;
-}
-
-.editor-topbar input[type="text"] {
-    font-family: var(--font-main);
-    font-size: 1.1rem;
-    font-weight: 700;
-    border: none;
-    outline: none;
-    color: var(--text-primary);
-    width: 60%;
-}
-
-.editor-topbar input[type="text"]::placeholder {
-    color: rgba(12, 42, 54, 0.3);
-}
-
-.actions {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-}
-
-.actions select,
-.actions button {
-    font-family: var(--font-main);
-    font-size: 0.85rem;
-    padding: 9px 14px;
-    border-radius: 8px;
-    border: 1px solid rgba(12, 42, 54, 0.15);
-    background: #fff;
-    cursor: pointer;
-}
-
-.actions button.primary {
-    background: var(--text-primary);
-    color: #fff;
-    border: none;
-    font-weight: 600;
-}
-
-#save-status {
-    font-size: 0.8rem;
-    color: var(--text-secondary);
-    margin-right: 6px;
-}
-
-.editor-wrap {
-    max-width: 720px;
-    margin: 40px auto 100px;
-    padding: 0 20px;
-}
-
-.codex-editor {
-    font-family: var(--font-main);
-}
-
-a.back {
-    color: var(--text-secondary);
-    text-decoration: none;
-    font-size: 0.85rem;
-    margin-right: 16px;
-}
+    </div>
+  </div>
+  </div>
+</div>
+</div>
+</body>
+</html>

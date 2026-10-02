@@ -122,6 +122,11 @@
     padding: 40px 32px;
 }
 
+/* Для дашборда — на всю доступную ширину окна, без узкой колонки */
+.wrap.wrap-full {
+    max-width: none;
+}
+
 .wrap h1 {
     font-size: 1.5rem;
     margin: 0;
