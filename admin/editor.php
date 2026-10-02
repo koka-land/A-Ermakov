@@ -20,6 +20,7 @@ if ($id) {
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title><?= $material ? 'Редактирование' : 'Новая статья' ?></title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400&family=Roboto:wght@100;300;400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/css/style.css">
 <link rel="stylesheet" href="/css/dashboard.css">
 <link rel="stylesheet" href="/css/admin.css">
@@ -28,6 +29,7 @@ if ($id) {
 
 <div class="page-frame">
 <div class="dashboard-container">
+<?php include __DIR__ . '/includes/sidebar.php'; ?>
 <div class="full-page">
   <div class="editor-topbar">
     <div style="display:flex;align-items:center;">

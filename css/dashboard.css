@@ -567,12 +567,13 @@
 /* (вход, список материалов, редактор — то же окно, без Hero-секции) */
 /* ========================================= */
 
-/* Для страниц без sidebar: единственный ребёнок должен занимать всё окно */
+/* Рядом с .sidebar (88px, position:absolute) — такой же отступ, как у .dashboard-content */
 .dashboard-container > .full-page {
     flex: 1;
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    margin-left: 88px;
 }
 
 /* Центрирование содержимого внутри окна (например, форма входа) */
