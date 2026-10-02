@@ -54,6 +54,52 @@
 
 
 /* ========================================= */
+/* --- ДАШБОРД (dashboard.php) --- */
+/* ========================================= */
+.stat-card {
+    background: #fff;
+    border-radius: 14px;
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.stat-value {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 2rem;
+    color: var(--text-primary);
+}
+
+.stat-value.published { color: #2a9d8f; }
+.stat-value.draft { color: #f4a261; }
+
+.stat-label {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.quick-actions {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 36px;
+}
+
+.btn.secondary {
+    background: #fff;
+    color: var(--text-primary);
+    border: 1px solid rgba(12, 42, 54, 0.15);
+}
+
+.section-title {
+    font-size: 1.05rem;
+    color: var(--text-primary);
+    margin: 0 0 14px;
+}
+
+
+/* ========================================= */
 /* --- СПИСОК МАТЕРИАЛОВ (materials.php) --- */
 /* ========================================= */
 .wrap {

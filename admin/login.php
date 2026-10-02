@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($username === ADMIN_USERNAME && password_verify($password, ADMIN_PASSWORD_HASH)) {
         $_SESSION['is_admin'] = true;
-        header('Location: /admin/materials.php');
+        header('Location: /admin/dashboard.php');
         exit;
     }
 
@@ -24,22 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <title>Вход в админку</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400&family=Roboto:wght@100;300;400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/css/style.css">
-<style>
-  .login-box{
-    max-width:360px;width:90%;background:#fff;border-radius:16px;
-    padding:36px 32px;box-shadow:0 10px 30px rgba(12,42,54,.08);
-  }
-  .login-box h1{font-size:1.3rem;margin:0 0 20px;color:var(--text-primary);}
-  .login-box input{
-    width:100%;padding:12px 14px;margin-bottom:14px;border:1px solid rgba(12,42,54,.15);
-    border-radius:10px;font-family:var(--font-main);font-size:.95rem;box-sizing:border-box;
-  }
-  .login-box button{
-    width:100%;padding:12px;border:none;border-radius:10px;background:var(--text-primary);
-    color:#fff;font-weight:700;font-size:.95rem;cursor:pointer;
-  }
-  .login-error{color:#e76f51;font-size:.85rem;margin:-6px 0 14px;}
-</style>
+<link rel="stylesheet" href="/css/admin.css">
 </head>
 <body>
   <div class="page-frame">
