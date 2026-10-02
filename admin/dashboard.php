@@ -14,7 +14,7 @@ $recent = $pdo->query(
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Дашборд — админка</title>
+<title>Панель администратора</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400&family=Roboto:wght@100;300;400;700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/css/style.css">
@@ -30,7 +30,7 @@ $recent = $pdo->query(
     <div class="wrap wrap-full">
 
       <div class="top">
-        <h1>Дашборд</h1>
+        <h1>Панель администратора</h1>
         <a class="logout" href="/admin/logout.php">Выйти</a>
       </div>
 
