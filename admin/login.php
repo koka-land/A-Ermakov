@@ -36,6 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           <input type="password" name="password" placeholder="Пароль" required>
           <button type="submit">Войти</button>
         </form>
+        <a class="back-to-site" href="/">← Вернуться на сайт</a>
       </div>
   </div>
 </body>

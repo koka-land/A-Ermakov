@@ -52,6 +52,20 @@
     margin: -6px 0 14px;
 }
 
+.back-to-site {
+    display: block;
+    text-align: center;
+    margin-top: 16px;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    text-decoration: none;
+    opacity: 0.75;
+}
+
+.back-to-site:hover {
+    opacity: 1;
+}
+
 
 /* ========================================= */
 /* --- ДАШБОРД (dashboard.php) --- */
