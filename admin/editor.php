@@ -126,6 +126,11 @@ if ($material) {
   const statusEl = document.getElementById('save-status');
   const materialId = <?= $material ? $material['id'] : 'null' ?>;
 
+  saveBtn.disabled = true;
+  editor.isReady
+    .then(() => { saveBtn.disabled = false; })
+    .catch((err) => { statusEl.textContent = 'Ошибка загрузки редактора'; console.error(err); });
+
   saveBtn.addEventListener('click', async () => {
     const title = document.getElementById('material-title').value.trim();
     if (!title) {
@@ -134,12 +139,13 @@ if ($material) {
     }
 
     statusEl.textContent = 'Сохранение…';
-    const content = await editor.save();
-    const categories = Array.from(
-      document.querySelectorAll('input[name="categories[]"]:checked')
-    ).map(cb => parseInt(cb.value, 10));
 
     try {
+      const content = await editor.save(); // теперь внутри try — ошибка не исчезает молча
+      const categories = Array.from(
+        document.querySelectorAll('input[name="categories[]"]:checked')
+      ).map(cb => parseInt(cb.value, 10));
+
       const res = await fetch('/admin/api/save.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

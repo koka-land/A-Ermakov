@@ -39,6 +39,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+// --- Иконки для быстрого выбора (без обращения к сторонним API — фиксированный список) ---
+$popularIcons = [
+    'code', 'functions', 'terminal', 'computer', 'memory',
+    'school', 'quiz', 'menu_book', 'calculate', 'science',
+    'smart_toy', 'extension', 'folder',
+];
+$moreIcons = [
+    'psychology', 'bolt', 'database', 'cloud', 'storage', 'router', 'lan',
+    'developer_board', 'bug_report', 'integration_instructions', 'data_object',
+    'api', 'widgets', 'dataset', 'model_training', 'smart_display', 'videocam',
+    'forum', 'groups', 'task_alt', 'assignment', 'category', 'label', 'star',
+    'flag', 'build', 'construction', 'settings', 'tune', 'security', 'lock',
+    'public', 'language', 'translate', 'draw', 'palette', 'image',
+    'photo_camera', 'music_note', 'sports_esports', 'rocket_launch',
+    'lightbulb', 'auto_awesome',
+];
+
 // --- Загрузка всех категорий и построение дерева ---
 $all = $pdo->query("SELECT * FROM categories ORDER BY name")->fetchAll();
 
@@ -113,8 +130,26 @@ function renderTree(array $byParent, $parentId, int $depth = 0): string
             <input type="text" name="name" placeholder="Например, Алгоритмы" required>
 
             <label>Иконка (Material Symbols)</label>
-            <input type="text" name="icon" placeholder="Например: code, functions, memory">
-            <p class="cat-hint">Название иконки с <a href="https://fonts.google.com/icons" target="_blank" rel="noopener">fonts.google.com/icons</a> — если оставить пустым, будет использована стандартная.</p>
+            <input type="text" name="icon" id="icon-input" placeholder="Например: code" value="folder">
+
+            <div class="icon-picker">
+              <?php foreach ($popularIcons as $ic): ?>
+                <button type="button" class="icon-swatch<?= $ic === 'folder' ? ' selected' : '' ?>" data-icon="<?= $ic ?>" onclick="pickIcon('<?= $ic ?>')" title="<?= $ic ?>">
+                  <span class="material-symbols-rounded"><?= $ic ?></span>
+                </button>
+              <?php endforeach; ?>
+              <button type="button" class="icon-more-toggle" onclick="toggleMoreIcons()">Ещё ▾</button>
+            </div>
+
+            <div class="icon-picker icon-picker-more" id="icon-more-grid">
+              <?php foreach ($moreIcons as $ic): ?>
+                <button type="button" class="icon-swatch" data-icon="<?= $ic ?>" onclick="pickIcon('<?= $ic ?>')" title="<?= $ic ?>">
+                  <span class="material-symbols-rounded"><?= $ic ?></span>
+                </button>
+              <?php endforeach; ?>
+            </div>
+
+            <p class="cat-hint">Или впишите своё название с <a href="https://fonts.google.com/icons" target="_blank" rel="noopener">fonts.google.com/icons</a>.</p>
 
             <label>Родительская категория</label>
             <select name="parent_id">
@@ -135,5 +170,15 @@ function renderTree(array $byParent, $parentId, int $depth = 0): string
   </div>
 </div>
 </div>
+<script>
+  function pickIcon(name) {
+    document.getElementById('icon-input').value = name;
+    document.querySelectorAll('.icon-swatch').forEach(b => b.classList.remove('selected'));
+    document.querySelectorAll('.icon-swatch[data-icon="' + name + '"]').forEach(b => b.classList.add('selected'));
+  }
+  function toggleMoreIcons() {
+    document.getElementById('icon-more-grid').classList.toggle('open');
+  }
+</script>
 </body>
 </html>

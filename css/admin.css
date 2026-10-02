@@ -376,6 +376,62 @@ ul.cat-tree.nested {
     font-size: 0.9rem;
 }
 
+.icon-picker {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 8px;
+}
+
+.icon-picker-more {
+    display: none;
+    margin-top: 6px;
+    padding-top: 10px;
+    border-top: 1px dashed rgba(12, 42, 54, 0.12);
+}
+
+.icon-picker-more.open {
+    display: flex;
+}
+
+.icon-swatch {
+    width: 38px;
+    height: 38px;
+    border: 1px solid rgba(12, 42, 54, 0.12);
+    border-radius: 8px;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--text-secondary);
+}
+
+.icon-swatch:hover {
+    border-color: #2a9d8f;
+    color: #2a9d8f;
+}
+
+.icon-swatch.selected {
+    background: #2a9d8f;
+    border-color: #2a9d8f;
+    color: #fff;
+}
+
+.icon-swatch .material-symbols-rounded {
+    font-size: 20px;
+}
+
+.icon-more-toggle {
+    align-self: center;
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 0.82rem;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
 .cat-hint {
     font-size: 0.78rem;
     color: var(--text-secondary);
